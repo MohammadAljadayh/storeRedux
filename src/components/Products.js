@@ -1,6 +1,6 @@
-import { Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { CardActions,Button,Card, CardContent, Grid, Typography } from '@material-ui/core';
 import CardMedia from '@mui/material/CardMedia';
-
+import { addToCart } from '../store/cart';
 import { connect } from 'react-redux';
 
 const Products = props => {
@@ -22,7 +22,10 @@ const Products = props => {
                                      alt="green iguana"
                                       />
                                 </CardContent>
-
+                                <CardActions>
+                                    <Button color="primary" onClick={() => props.addToCart(product)}>Add to cart</Button>
+                                    <Button color="primary">Details</Button>
+                                </CardActions>
                             </Card>
                         </Grid>
                     )
@@ -37,4 +40,5 @@ const mapStateToProps = state => ({
     catReducer: state.catReducer
 });
 
-export default connect(mapStateToProps)(Products);
+const mapDispatchToProps = {addToCart };
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

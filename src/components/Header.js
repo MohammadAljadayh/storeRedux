@@ -5,9 +5,18 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { connect } from 'react-redux';
+import { Button, Grid, makeStyles  } from '@material-ui/core';
 
-function Header() {
+function Header(props) {
 
+  const useStyles = makeStyles({
+    cart: {
+        textAlign: "right"
+    }
+})
+
+const classes = useStyles();
     return (
         <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
@@ -18,13 +27,25 @@ function Header() {
             <Typography variant="h6" color="inherit" component="div">
               Store Redux
             </Typography>
+            <Grid item xs className={classes.cart}>
+                            <Button href="#">
+                                <Typography>Cart({props.cartReducer.cart.length})</Typography>
+                            </Button>
+                        </Grid>
           </Toolbar>
         </AppBar>
       </Box>
     )
 }
 
-export default Header;
+const mapStateToProps = state => ({
+  cartReducer: state.cartReducer
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
 
 
 
