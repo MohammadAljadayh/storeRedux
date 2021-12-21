@@ -18,7 +18,9 @@
     "@mui/material": "latest",
     "@mui/icons-material": "latest",
     "@emotion/styled": "latest",
-    "@emotion/react": "latest"
+    "@emotion/react": "latest",
+    "axios": "^0.22.0",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
