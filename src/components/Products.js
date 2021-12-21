@@ -2,8 +2,19 @@ import { CardActions,Button,Card, CardContent, Grid, Typography } from '@materia
 import CardMedia from '@mui/material/CardMedia';
 import { addToCart } from '../store/cart';
 import { connect } from 'react-redux';
+import { useEffect } from 'react';
+import { getRemoteData, putRemoteData } from '../store/product';
 
 const Products = props => {
+
+    const fetchProducts = (e) => {
+        e && e.preventDefault();
+        props.get();
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
     return (
         <section>
@@ -39,6 +50,9 @@ const mapStateToProps = state => ({
     prodReducer: state.prodReducer,
     catReducer: state.catReducer
 });
+const mapDispatchToProps = (dispatch) => ({
+    addToCart: (product) => dispatch(putRemoteData(product, true)),
+    get: () => dispatch(getRemoteData())
+});
 
-const mapDispatchToProps = {addToCart };
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

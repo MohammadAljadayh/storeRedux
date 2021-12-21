@@ -1,59 +1,42 @@
+
+import axios from 'axios';
+import { addToCart, removeFromCart } from './cart';
+const api = 'https://run.mocky.io/v3/23fae1fb-8696-4dd8-850a-ea1bcab19d2d';
+// const api = 'https://run.mocky.io/v3/0cd516da-382a-4ad5-bc18-d9db39fa1454';
+
 let initialState = {
-    products: [
-        {
-            category: 'PC',
-            name: 'HP',
-            price: 650,
-            image:"https://id-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/1/x/1x6q6pa-bundle.png"
-
-        },
-        {
-            category: 'PC',
-            name: 'DELL',
-            price: 450,
-          image : "https://i5.walmartimages.com/asr/20c2da98-23b6-42c0-99ff-3719a352c2a8_1.d7738944df20f5cd082a4c5d826986b0.jpeg"
-        },
-        {
-            category: 'PC',
-            name: 'Toshipa',
-            price: 550,
-            image :"https://gts.jo/image/cache/catalog/products/laptops/toshiba/TECRA-X40-D-122-1-550x400.jpg"
-        },
-        {
-            category: 'Mobile',
-            name: 'Samsung',
-            price: 250,
-            image:"https://www.androidcentral.com/sites/androidcentral.com/files/styles/large/public/article_images/2021/01/samsung-galaxy-s21-series-2.jpg"
-        },
-        {
-            category: 'Mobile',
-            name: 'Iphone',
-            price: 440,
-            image:"https://media.wired.com/photos/6149204955f7b3aea723343d/master/pass/Gear-Review-Apple_iPhone-13-Pro_Colors_09142021.jpg "
-        },
-        {
-            category: 'Mobile',
-            name: 'Relme',
-            price: 320,
-            image:" https://www.techadvisor.com/cmsdata/slideshow/3789412/best_realme_phone_2020_hero_thumb800.jpg"
-        },
-
-    ],
+    products: [],
 }
-
 const prodReducer = (state = initialState, action) => {
-    let { type } = action;
-
+    let { type, payload } = action;
     switch (type) {
-        case 'SETCATEGORY':
-            let products = initialState.products;
-            return { products };
 
-        case 'RESET':
-            return initialState;
-
+        case 'GET_PRODS':
+            return { products: payload };
         default:
             return state;
+    }
+}
+export const getRemoteData = () => async dispatch => {
+    let response = await axios.get(api);
+    dispatch(getAction(response.data))
+}
+
+export const putRemoteData = (product, incrementor) => async dispatch => {
+    let inventory = (await axios.get(`${api}/${product._id}`)).data.inventory;
+    const update = { ...product, inventory: incrementor ? inventory - 1 : inventory + 1 }
+    let response = await axios.put(`${api}/${product._id}`, update)
+    console.log('inventory: ', response.data.inventory);
+    if (response.status) {
+        incrementor ? dispatch(addToCart(response.data)) : dispatch(removeFromCart(product));
+        dispatch(getRemoteData());
+    }
+}
+
+export const getAction = (data) => {
+    return {
+        type: 'GET_PRODS',
+        payload: data
     }
 }
 
