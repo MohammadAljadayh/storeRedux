@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -5,17 +6,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { connect } from 'react-redux';
-import { Button, Grid, makeStyles  } from '@material-ui/core';
+import {  makeStyles  } from '@material-ui/core';
+import SimpleCart from './cart';
 
-function Header(props) {
+function Header() {
 
   const useStyles = makeStyles({
-    cart: {
+    Cart: {
         textAlign: "right"
     }
 })
-
 const classes = useStyles();
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -27,25 +27,13 @@ const classes = useStyles();
             <Typography variant="h6" color="inherit" component="div">
               Store Redux
             </Typography>
-            <Grid item xs className={classes.cart}>
-                            <Button href="#">
-                                <Typography>Cart({props.cartReducer.cart.length})</Typography>
-                            </Button>
-                        </Grid>
+            <SimpleCart  />
           </Toolbar>
+     
         </AppBar>
+        
       </Box>
     )
 }
 
-const mapStateToProps = state => ({
-  cartReducer: state.cartReducer
-});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
-
-
-
-
+export default Header;
